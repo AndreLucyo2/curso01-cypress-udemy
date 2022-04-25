@@ -1,0 +1,23 @@
+{
+  "name": "curso01-cypress-udemy",
+  "version": "1.0.0",
+  "description": "curso01-cypress-udemy  :  https://www.udemy.com/share/102gwk3@adoSuwIo2lqt8EyoenKtLH6QjM1q7HahA9gJim-DjK9qx1bkAucS4g4w0lramQA9/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreLucyo2/curso01-cypress-udemy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreLucyo2/curso01-cypress-udemy/issues"
+  },
+  "homepage": "https://github.com/AndreLucyo2/curso01-cypress-udemy#readme",
+  "devDependencies": {
+    "cypress": "^9.5.4"
+  }
+}
