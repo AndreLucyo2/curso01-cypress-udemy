@@ -1,18 +1,36 @@
 it('sem testes ainda', () => { });
 
 //-----------------------------------------------
-const getSomething = () => {
+// const getSomething = () => {
+//     setTimeout(() => {
+//         console.log('respondendo...');
+//         return 11;
+//     }, 1000)
+// }
+
+// const system = () => {
+//     console.log('Init');
+//     const something = getSomething();
+//     console.log(`Somthing is ${something}`)
+//     console.log('end')
+// }
+
+// system()
+
+const getSomething = (callback) => {
     setTimeout(() => {
-        console.log('respondendo...');
-        return 11;
+        callback(12);
     }, 1000)
 }
 
 const system = () => {
-    console.log('Init');
-    const something = getSomething();
-    console.log(`Somthing is ${something}`)
+    console.log('init');
+    //executa de forma assincrona:
+    getSomething(some => console.log(`Something is ${some}`));
     console.log('end')
 }
 
-system()
+system();
+
+
+
