@@ -4,7 +4,7 @@
   "description": "curso01-cypress-udemy  :  https://www.udemy.com/share/102gwk3@adoSuwIo2lqt8EyoenKtLH6QjM1q7HahA9gJim-DjK9qx1bkAucS4g4w0lramQA9/",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cypress:open": "npx cypress open"
   },
   "repository": {
     "type": "git",
