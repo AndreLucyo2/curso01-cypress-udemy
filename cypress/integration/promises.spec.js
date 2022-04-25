@@ -17,20 +17,40 @@ it('sem testes ainda', () => { });
 
 // system()
 
-const getSomething = (callback) => {
-    setTimeout(() => {
-        callback(12);
-    }, 1000)
+// const getSomething = (callback) => {
+//     setTimeout(() => {
+//         callback(12);
+//     }, 1000)
+// }
+
+// const system = () => {
+//     console.log('init');
+//     //executa de forma assincrona:
+//     getSomething(some => console.log(`Something is ${some}`));
+//     console.log('end')
+// }
+
+// system();
+
+const getSomething = () => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(13);
+        }, 1000)
+    })
 }
 
 const system = () => {
     console.log('init');
-    //executa de forma assincrona:
-    getSomething(some => console.log(`Something is ${some}`));
-    console.log('end')
+    const prom = getSomething();
+    prom.then(some => {
+        console.log(`Something is ${some}`)
+        console.log('end');
+    })
 }
 
 system();
+
 
 
 
