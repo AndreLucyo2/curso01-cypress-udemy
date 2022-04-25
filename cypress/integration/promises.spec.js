@@ -1,7 +1,13 @@
 it('sem testes ainda', () => { });
 
 //-----------------------------------------------
-const getSomething = () => 10;
+const getSomething = () => {
+    setTimeout(() => {
+        console.log('respondendo...');
+        return 11;
+    }, 1000)
+}
+
 const system = () => {
     console.log('Init');
     const something = getSomething();
