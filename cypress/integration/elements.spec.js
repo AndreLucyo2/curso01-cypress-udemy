@@ -80,7 +80,7 @@ describe('Work with basic elements', () => {
 
     });
 
-    it.only('CheckBox', () => {
+    it('CheckBox', () => {
 
         //Checa a opção pizza:
         cy.get('#formComidaPizza')
@@ -88,9 +88,24 @@ describe('Work with basic elements', () => {
             .should('be.checked')
 
         //Checa todos os checkbox
-        cy.get('[name=formComidaFavorita]').click({multiple: true})
+        cy.get('[name=formComidaFavorita]').click({
+            multiple: true
+        })
         cy.get('#formComidaPizza').should('not.be.checked')
         cy.get('#formComidaVegetariana').should('be.checked')
+
+    });
+
+    it.only('ComboBox', () => {
+        //Selecionando o valor visivel:
+        cy.get('[data-test="dataEscolaridade"]')
+            .select('2o grau completo')
+            .should('have.value', '2graucomp')
+
+        //selecionando o value
+        cy.get('[data-test="dataEscolaridade"]')
+            .select('1graucomp')
+            .should('have.value', '1graucomp')
 
     });
 
