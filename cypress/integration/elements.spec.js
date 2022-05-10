@@ -96,7 +96,7 @@ describe('Work with basic elements', () => {
 
     });
 
-    it.only('ComboBox', () => {
+    it('ComboBox', () => {
         //Selecionando o valor visivel:
         cy.get('[data-test="dataEscolaridade"]')
             .select('2o grau completo')
@@ -107,7 +107,21 @@ describe('Work with basic elements', () => {
             .select('1graucomp')
             .should('have.value', '1graucomp')
 
+        //TODO: Validar as opções do combo
+
     });
 
+    it.only('Combobox multiplo select', () => {
+
+        //Sewlecionar mais de uma opção, manda um array de values
+        cy.get('[data-testid=dataEsportes]')
+            .select(['natacao', 'Corrida', 'nada'])
+
+        //TODO: Validar as opções selecionadas do combo mltiplo
+
+
+
+
+    });
 
 });

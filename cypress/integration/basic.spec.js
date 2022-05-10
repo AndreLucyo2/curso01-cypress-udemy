@@ -24,8 +24,8 @@ describe.only('Cypress basics', () => {
             .and('contain', 'Campo')
 
         //Desafios :
-        //TODO imprimir o titulo no console
-        //TODO escrever o log em um campo de texto na pagina
+        //TODO: Imprimir o titulo no console
+        //TODO: Escrever o log em um campo de texto na pagina
     });
 
     it('Should find and with an element', () => {
