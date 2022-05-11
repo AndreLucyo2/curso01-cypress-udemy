@@ -70,7 +70,7 @@ describe('Esperas...', () => {
 
     });
 
-    it.only('Uso do wait', () => {
+    it('Uso do wait', () => {
 
         cy.get('#buttonListDOM').click()
         //só libera quando satifazer todas as acertivas
@@ -81,6 +81,15 @@ describe('Esperas...', () => {
         //Ideal é fazer as acertivas separadas
         cy.get('#lista li span')
             .should('have.length', 2)
+    });
+
+    it.only('Click retry', () => {
+
+        //comandos que alteram o html nao serão retentados
+        cy.get('#buttonCount')
+        .click()
+        .should('have.value','11')
+            
     });
 
 
