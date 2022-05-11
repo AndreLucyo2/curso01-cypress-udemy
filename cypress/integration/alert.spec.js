@@ -27,4 +27,17 @@ describe('Esperas...', () => {
 
     });
 
+    it.only('Alert com mock', () => {
+
+        //Criar um mock do alerta
+        const stub = cy.stub().as('Alerta') 
+        //Injeta o mock
+        cy.on('window:alert', stub)   
+        //Faz o acert     
+        cy.get('#alert').click().then(()=>{
+            expect(stub.getCall(0)).to.be.calledWith('Alert Simples')
+        })
+
+    });
+
 });
