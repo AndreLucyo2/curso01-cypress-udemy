@@ -92,7 +92,7 @@ describe('Esperas...', () => {
 
     });
 
-    it.only('Should vs Then', () => {
+    it('Should vs Then', () => {
         cy.get('#buttonListDOM').click()
         // cy.get('#lista li span').debug()
 
@@ -101,6 +101,15 @@ describe('Esperas...', () => {
             expect($el).to.have.length(1)
 
         })
+    })
+
+    it.only('Should vs Then', () => {
+
+        cy.get('#buttonListDOM').then($el => {
+                console.log($el)
+                expect($el).to.have.length(1)
+               
+            });
     })
 
 
