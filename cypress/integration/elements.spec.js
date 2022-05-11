@@ -96,7 +96,7 @@ describe('Work with basic elements', () => {
 
     });
 
-    it.only('ComboBox', () => {
+    it('ComboBox', () => {
         //Selecionando o valor visivel:
         cy.get('[data-test="dataEscolaridade"]')
             .select('2o grau completo')
@@ -111,12 +111,12 @@ describe('Work with basic elements', () => {
         //Saber que existe um determinado item
         // 1 - validar a qtd de itens do combo
         cy.get('[data-test="dataEscolaridade"] option').should('have.length', 8)
-        
+
         // 2 - Obter os itens, faz iteração
-        cy.get('[data-test="dataEscolaridade"] option').then($arr =>{
+        cy.get('[data-test="dataEscolaridade"] option').then($arr => {
             const values = []
 
-            $arr.each(function(){
+            $arr.each(function () {
                 //Obtem os elementos e adiciona no array
                 values.push(this.innerHTML)
             })
@@ -126,16 +126,29 @@ describe('Work with basic elements', () => {
         })
     });
 
-    it('Combobox multiplo select', () => {
+    it.only('Combobox multiplo select', () => {
 
         //Sewlecionar mais de uma opção, manda um array de values
         cy.get('[data-testid=dataEsportes]')
             .select(['natacao', 'Corrida', 'nada'])
 
-        //TODO: Validar as opções selecionadas do combo mltiplo
+        //Validar as opções selecionadas do combo multiplo
+        //incorreto:
+        // cy.get('[data-testid=dataEsportes]').should('have.value', ['natacao', 'Corrida', 'nada'])
+        
+        //Forma 1:
+        cy.get('[data-testid=dataEsportes]').then($el => {
+            //validar a quantidade de itens selecionada:
+            expect($el.val()).to.have.length(3)
+            //validar quais itens foram selecionadaos
+            expect($el.val()).to.be.deep.equal(['natacao', 'Corrida', 'nada'])
 
+        })
 
-
+        //Forma 2:
+        cy.get('[data-testid=dataEsportes]')
+            .invoke('val')
+            .should('eql', ['natacao', 'Corrida', 'nada'])
 
     });
 
