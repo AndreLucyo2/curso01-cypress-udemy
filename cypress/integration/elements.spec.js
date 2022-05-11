@@ -96,7 +96,7 @@ describe('Work with basic elements', () => {
 
     });
 
-    it('ComboBox', () => {
+    it.only('ComboBox', () => {
         //Selecionando o valor visivel:
         cy.get('[data-test="dataEscolaridade"]')
             .select('2o grau completo')
@@ -107,11 +107,26 @@ describe('Work with basic elements', () => {
             .select('1graucomp')
             .should('have.value', '1graucomp')
 
-        //TODO: Validar as opções do combo
+        //Validar as opções do combo
+        //Saber que existe um determinado item
+        // 1 - validar a qtd de itens do combo
+        cy.get('[data-test="dataEscolaridade"] option').should('have.length', 8)
+        
+        // 2 - Obter os itens, faz iteração
+        cy.get('[data-test="dataEscolaridade"] option').then($arr =>{
+            const values = []
 
+            $arr.each(function(){
+                //Obtem os elementos e adiciona no array
+                values.push(this.innerHTML)
+            })
+
+            //Validar se os elementos estão presentes
+            expect(values).to.include.members(['Superior', 'Mestrado'])
+        })
     });
 
-    it.only('Combobox multiplo select', () => {
+    it('Combobox multiplo select', () => {
 
         //Sewlecionar mais de uma opção, manda um array de values
         cy.get('[data-testid=dataEsportes]')
