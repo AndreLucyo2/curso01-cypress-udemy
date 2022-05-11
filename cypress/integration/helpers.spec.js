@@ -39,9 +39,7 @@ describe('Helpers', () => {
         cy.get('#buttonList').then(() => console.log('Encontrei o segundo'))
     });
 
-
-
-    it.only('Its...', () => {
+    it('Its...', () => {
         const obj = {
             nome: 'User',
             idade: 20
@@ -72,7 +70,36 @@ describe('Helpers', () => {
         //Pegando uma propriedade do titulo:
         cy.title().its('length').should('be.eq', 20)
 
+    });
 
+    it('Invoke...', () => {
+        //Função js puro:
+        const getvalue = () => 1;
+
+        const soma = (a, b) => a + b;
+
+        //invocando uma função recebida pelo objeto:
+        cy.wrap({
+            fn: getvalue
+        }).invoke('fn').should('be.equal', 1)
+
+        //invocando uma função com parametros
+        cy.wrap({
+            fn: soma
+        }).invoke('fn', 5, 6).should('be.equal', 11)
+
+
+
+    });
+
+    it.only('Invoke...', () => {
+
+        cy.visit('https://wcaquino.me/cypress/componentes.html')
+        //exemplo de invoke
+        cy.get('#formNome').invoke('val','Texto via invoke')
+        cy.window().invoke('alert','Alert via cypress?')
+        cy.get('#resultado')
+        .invoke('html','<input type="button" value="Hacked"/>')
 
     });
 
