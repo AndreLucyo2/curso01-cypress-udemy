@@ -18,3 +18,20 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+//Estrategia e Ordem para o SelectorPlayground:
+//ref: https://docs.cypress.io/api/cypress-api/selector-playground-api#Arguments
+Cypress.SelectorPlayground.defaults({
+    selectorPriority: [
+        'data-wc',
+        'id',
+        'data-cy',
+        'data-test',
+        'data-testid',
+        'class',
+        'tag',
+        'attributes',
+        'nth-child'
+    ]
+
+})
