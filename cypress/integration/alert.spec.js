@@ -57,14 +57,14 @@ describe('Esperas...', () => {
             //Depois que confirmou deve aparecer a msg confirmado
             expect(msg).to.be.equal('Confirmado')
         })
-        
+
         //Clicar para aparecer o confirm
         cy.get('#confirm').click()
 
     });
 
     //CxMsg de clicando em cancelar
-    it.only('Cancelado', () => {
+    it('Cancelado', () => {
 
         //PREPARAR OS EVENTOS:
         // Obtem a msg do confirm
@@ -73,7 +73,7 @@ describe('Esperas...', () => {
             //Cria um acert para comparar a mensagem esperada
             expect(msg).to.be.equal('Confirm Simples')
             //o usuario cancelou
-            return false   
+            return false
         })
 
         //Validar se foi confirmado
@@ -82,10 +82,38 @@ describe('Esperas...', () => {
             //Depois que confirmou deve aparecer a msg negado
             expect(msg).to.be.equal('Negado')
         })
-        
+
         //Clicar para aparecer o confirm
         cy.get('#confirm').click()
 
     });
+
+    //CxMsg de que recebe um valor
+    it.only('Prompt', () => {
+
+        //PREPARAR OS EVENTOS:
+        cy.window().then(win => {
+            cy.stub(win, 'prompt').returns('42')
+        })
+
+        //Validar se apareceu o confirm com o valor informado
+        cy.on('window:confirm', msg => {           
+            //Depois que confirmou deve aparecer a msg confirmado
+            expect(msg).to.be.equal('Era 42?')
+        })
+
+        //Validar se apareceu o alert
+        cy.on('window:alert', msg => {           
+            //Depois que confirmou deve aparecer a msg
+            expect(msg).to.be.equal(':D')
+        })
+
+        //Clicar para disparar o evento do prompt
+        cy.get('#prompt').click()
+
+    });
+
+
+
 
 });
