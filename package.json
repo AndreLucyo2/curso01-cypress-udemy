@@ -4,7 +4,8 @@
   "description": "curso01-cypress-udemy  :  https://www.udemy.com/share/102gwk3@adoSuwIo2lqt8EyoenKtLH6QjM1q7HahA9gJim-DjK9qx1bkAucS4g4w0lramQA9/",
   "main": "index.js",
   "scripts": {
-    "cypress:open": "npx cypress open"
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run"
   },
   "repository": {
     "type": "git",
