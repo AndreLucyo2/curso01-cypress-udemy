@@ -2,21 +2,12 @@
 
 describe('Work with iframes', () => {
 
-    //Executa uma vez antes de cada test
-    before(() => {
-        cy.visit('https://wcaquino.me/cypress/componentes.html')
-    });
-
-    //Executa antes de cada teste
-    beforeEach(() => {
-        //Recarregar a pagina
-        cy.reload()
-    });
-
     //Interagindo com componente externo á pagina
-    it.only('Deve preencher o campo com texto iframe externo', () => {
+    it('Deve preencher o campo com texto no iframe externo', () => {
 
-        //Obtem o frame que contem o elemento externo
+        cy.visit('https://wcaquino.me/cypress/componentes.html')
+        
+        //Obtem elementos dentro do escopo do iframe
         cy.get('#frame1').then(iframe => {
             //Guarda o contexto em uma variavel
             const body = iframe.contents().find('body')
@@ -27,6 +18,18 @@ describe('Work with iframes', () => {
                 .should('have.value', 'Funcionou!')
         })
 
+    });
+
+    //Interagindo com componente externo á pagina
+    it('Deve iframe diretamente', () => {
+
+        cy.visit('https://wcaquino.me/cypress/frame.html')
+
+        cy.on('window:alert', msg =>{
+            expect(msg).to.be.equal('Click OK!')
+        })
+        
+        cy.get('#otherButton').click()
     });
 
 
