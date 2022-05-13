@@ -13,17 +13,20 @@ describe('Esperas...', () => {
         cy.reload()
     });
 
-    it('Alert', () => {
+    it.only('Alert', () => {
 
-        cy.get('#alert').click()
+        // cy.get('#alert').click()
 
-        //Chegar se o alert apareceu
-        // 1 - Obtem a msg do alert
-        cy.on('window:alert', msg => {
-            console.log(msg)
-            //Cria um acert para comparar a mensagem esperada
-            expect(msg).to.be.equal('Alert Simples')
-        })
+        // //Chegar se o alert apareceu
+        // // 1 - Obtem a msg do alert
+        // cy.on('window:alert', msg => {
+        //     console.log(msg)
+        //     //Cria um acert para comparar a mensagem esperada
+        //     expect(msg).to.be.equal('Alert Simples')
+        // })
+
+        //Comando personalisado: ver /suport/commands.js
+        cy.clickAlert('#alert','Alert Simples')
 
     });
 
@@ -133,7 +136,7 @@ describe('Esperas...', () => {
     //----------------------------------------------------------
     //Resolvendo:
     //----------------------------------------------------------
-    it.only('Validando mensagens Desafio', () => {
+    it('Validando mensagens Desafio', () => {
 
 
         //Criar stub do alerta
