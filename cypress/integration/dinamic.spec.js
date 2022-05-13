@@ -51,27 +51,24 @@ describe('Dinamic tests', () => {
             cy.get('#formSobrenome').type(this.usuario.sobrenome)
             cy.get(`[name=formSexo][value=${this.usuario.sexo}]`).click()
 
-            //Clicando em todos ao mesmo tempo:
-            // cy.get('[name=formComidaFavorita]').click({
-            //     multiple: true
-            // })
-
-            //Usando o EACH: Clica em da um, mostra a rastreabilidade
+            //Usando o EACH:
             cy.get('[name=formComidaFavorita]').each($el =>{
-                cy.wrap($el).click()
+
+                //Condicional para atender a regra:
+                if ($el.val() != 'vegetariano' ) {                    
+                    cy.wrap($el).click()
+                }
             })
 
             cy.get('#formEscolaridade').select(this.usuario.escolaridade)
             cy.get('#formEsportes').select(this.usuario.esportes)
 
-            // //Clicar em cadastrar
-            // cy.get('#formCadastrar').click()
+            //Clicar em cadastrar
+            cy.get('#formCadastrar').click()
 
-            // //Valida se apareceu a informação de cadastrado
-            // cy.get('#resultado > :nth-child(1)').should('contain', 'Cadastrado')
-
-            cy.clickAlert('#formCadastrar', 'Tem certeza que voce eh vegetariano?')
-
+            //Valida se apareceu a informação de cadastrado
+            cy.get('#resultado > :nth-child(1)').should('contain', 'Cadastrado')
+  
         })
 
     });
