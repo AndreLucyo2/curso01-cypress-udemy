@@ -16,6 +16,12 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+//locator com xpatch -- instalar plugin : seção 7 Xpath
+// https://docs.cypress.io/plugins/directory
+// https://github.com/cypress-io/cypress-xpath    
+require("cypress-xpath");
+
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
