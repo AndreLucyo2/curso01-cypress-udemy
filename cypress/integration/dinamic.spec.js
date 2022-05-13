@@ -9,37 +9,74 @@ describe('Dinamic tests', () => {
     const foods = ['Carne', 'Frango', 'Pizza', 'Vegetariano']
 
     //faz um laço com os elementos do array
-    foods.forEach(food =>{
+    foods.forEach(food => {
 
         //Vai executar um teste para cada elemento do array:
-        it(`Cadastro com comida variada: '${food}'`, function() {
-            
-                   //Obtem os dados mokados: busca direto na pasta de fixtures
-                   cy.fixture('userData').as('usuario').then(() => {
-    
-                    cy.get('#formNome').type(this.usuario.nome)
-                    cy.get('#formSobrenome').type(this.usuario.sobrenome)
-                    cy.get(`[name=formSexo][value=${this.usuario.sexo}]`).click()
+        it(`Cadastro com comida variada: '${food}'`, function () {
 
-                    //locator com xpatch -- instalar plugin : seção 7 Xpath
-                    // https://docs.cypress.io/plugins/directory
-                    // https://github.com/cypress-io/cypress-xpath                
-                    cy.xpath(`//label[contains(.,'${food}')]/preceding-sibling::input`).click()
-    
-                    cy.get('#formEscolaridade').select(this.usuario.escolaridade)
-                    cy.get('#formEsportes').select(this.usuario.esportes)
-        
-                    //Clicar em cadastrar
-                    cy.get('#formCadastrar').click()
-            
-                    //Valida se apareceu a informação de cadastrado
-                    cy.get('#resultado > :nth-child(1)').should('contain', 'Cadastrado')
-        
-                })  
-    
+            //Obtem os dados mokados: busca direto na pasta de fixtures
+            cy.fixture('userData').as('usuario').then(() => {
+
+                cy.get('#formNome').type(this.usuario.nome)
+                cy.get('#formSobrenome').type(this.usuario.sobrenome)
+                cy.get(`[name=formSexo][value=${this.usuario.sexo}]`).click()
+
+                //locator com xpatch -- instalar plugin : seção 7 Xpath
+                // https://docs.cypress.io/plugins/directory
+                // https://github.com/cypress-io/cypress-xpath                
+                cy.xpath(`//label[contains(.,'${food}')]/preceding-sibling::input`).click()
+
+                cy.get('#formEscolaridade').select(this.usuario.escolaridade)
+                cy.get('#formEsportes').select(this.usuario.esportes)
+
+                //Clicar em cadastrar
+                cy.get('#formCadastrar').click()
+
+                //Valida se apareceu a informação de cadastrado
+                cy.get('#resultado > :nth-child(1)').should('contain', 'Cadastrado')
+
+            })
+
         });
 
     })
+
+
+    it.only(`Cadastro com comida variada usando each:`, function () {
+
+        //Obtem os dados mokados: busca direto na pasta de fixtures
+        cy.fixture('userData').as('usuario').then(() => {
+
+            cy.get('#formNome').type(this.usuario.nome)
+            cy.get('#formSobrenome').type(this.usuario.sobrenome)
+            cy.get(`[name=formSexo][value=${this.usuario.sexo}]`).click()
+
+            //Clicando em todos ao mesmo tempo:
+            // cy.get('[name=formComidaFavorita]').click({
+            //     multiple: true
+            // })
+
+            //Usando o EACH: Clica em da um, mostra a rastreabilidade
+            cy.get('[name=formComidaFavorita]').each($el =>{
+                cy.wrap($el).click()
+            })
+
+            cy.get('#formEscolaridade').select(this.usuario.escolaridade)
+            cy.get('#formEsportes').select(this.usuario.esportes)
+
+            // //Clicar em cadastrar
+            // cy.get('#formCadastrar').click()
+
+            // //Valida se apareceu a informação de cadastrado
+            // cy.get('#resultado > :nth-child(1)').should('contain', 'Cadastrado')
+
+            cy.clickAlert('#formCadastrar', 'Tem certeza que voce eh vegetariano?')
+
+        })
+
+    });
+
+
 
 
 })
