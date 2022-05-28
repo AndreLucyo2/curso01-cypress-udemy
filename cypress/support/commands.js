@@ -24,10 +24,19 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+//----------------------------------------------------------------------------
 //Comandos personalizados: Seção8 aula commands
 Cypress.Commands.add('clickAlert', (locator, message)=>{
     cy.get(locator).click()
     cy.on('window:alert', msg=> {
         expect(msg).to.be.equal(message)
     })                                         
+})
+
+//----------------------------------------------------------------------------
+//Comando para fazer login: Seção 09
+Cypress.Commands.add('login',(email,senha)=>{
+    cy.get('.input-group > .form-control').type(email)
+    cy.get('[data-test="passwd"]').type(senha);
+    cy.get('.btn').click();    
 })
