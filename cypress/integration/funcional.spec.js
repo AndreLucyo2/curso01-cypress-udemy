@@ -7,7 +7,7 @@ describe('Sholud test at a functional level', () => {
         cy.visit('https://barrigareact.wcaquino.me/') 
     });
 
-    it.only('Login', () => {
+    it('Login', () => {
         //Arrange
         cy.get('.input-group > .form-control').type('andre.lucyo2@gmail.com')
         cy.get('[data-test="passwd"]').type('123456');
@@ -20,7 +20,7 @@ describe('Sholud test at a functional level', () => {
 
     });
 
-    it('...', () => {
+    it.only('...', () => {
 
         //Arrange
         cy.login('andre.lucyo2@gmail.com','123456');
