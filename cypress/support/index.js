@@ -29,11 +29,11 @@ require("cypress-xpath");
 //ref: https://docs.cypress.io/api/cypress-api/selector-playground-api#Arguments
 Cypress.SelectorPlayground.defaults({
     selectorPriority: [
-        'data-wc',
-        'id',
         'data-cy',
+        'data-wc',
         'data-test',
         'data-testid',
+        'id',
         'class',
         'tag',
         'attributes',
