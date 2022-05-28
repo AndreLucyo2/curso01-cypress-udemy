@@ -7,13 +7,30 @@ describe('Sholud test at a functional level', () => {
         cy.visit('https://barrigareact.wcaquino.me/') 
     });
 
-    it('Login', () => {
-        // cy.get('.input-group > .form-control').type('andre.lucyo2@gmail.com')
-        // cy.get('[data-test="passwd"]').type('123456');
-        // cy.get('.btn').should('be.visible').click();
-        cy.login('andre.lucyo2@gmail.com','123456');
+    it.only('Login', () => {
+        //Arrange
+        cy.get('.input-group > .form-control').type('andre.lucyo2@gmail.com')
+        cy.get('[data-test="passwd"]').type('123456');
+
+        //Act
+        cy.get('.btn').should('be.visible').click();
+
+        //Assert:
         cy.get('.toast-message').should('contain','Bem vindo');
 
+    });
+
+    it('...', () => {
+
+        //Arrange
+        cy.login('andre.lucyo2@gmail.com','123456');
+
+        //Act
+
+
+        //Assert:
+
+        
     });
     
 });
