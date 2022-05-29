@@ -4,8 +4,8 @@
 describe('Sholud test at a functional level', () => {
 
     before(() => {
-        cy.visit('https://barrigareact.wcaquino.me/') 
-        cy.login('andre.lucyo2@gmail.com','123456');
+        cy.visit('https://barrigareact.wcaquino.me/')
+        cy.login('andre.lucyo2@gmail.com', '123456');
     });
 
     xit('Login', () => {
@@ -17,22 +17,45 @@ describe('Sholud test at a functional level', () => {
         cy.get('.btn').should('be.visible').click();
 
         //Assert:
-        cy.get('.toast-message').should('contain','Bem vindo');
+        cy.get('.toast-message').should('contain', 'Bem vindo');
 
     });
 
-    it.only('Create an account', () => {
+    it('Create an account', () => {
         //Arrange
         cy.get('[data-test="menu-settings"]').click();
         cy.get('[href="/contas"]').click();
-        cy.get('[data-test="nome"]').should('be.visible').type('Conta Teste - '+ Date.now())
-        
+        cy.get('[data-test="nome"]').should('be.visible').type('Conta Teste - ' + Date.now())
+
         //Act
         cy.get('.btn').should('be.visible').click();
-                
+
         //Assert
-        cy.get('.toast-message').should('contain','Conta inserida com sucesso');
+        cy.get('.toast-message').should('contain', 'Conta inserida com sucesso');
 
     });
-    
+
+    it('Update an Count', () => {
+        //Arrange
+        const nmConta = 'Conta Teste - ' + Date.now();
+        const nmContaEdit = 'Conta Editada - ' + Date.now();
+        //Crio uma conta:
+        cy.get('[data-test="menu-settings"]').click();
+        cy.get('[href="/contas"]').click();
+        cy.get('[data-test="nome"]').should('be.visible').type(nmConta)
+        cy.get('.btn').should('be.visible').click();
+       
+        //Act
+        //Seleciono e clico em editar:
+        cy.get('.table').should('be.visible').children().contains(nmConta).click();
+        cy.xpath(`//table//td[contains(.,'${nmConta}')]/..//i[@class='far fa-edit']`).click()
+        //Limpo o campo e altero o nome:
+        cy.get('[data-test="nome"]').should('be.visible').clear().type(nmContaEdit);
+        cy.get('.btn').should('be.visible').click();
+
+        //Assert
+        cy.get('.toast-message').should('contain', 'Conta atualizada com sucesso');
+
+    });
+
 });
