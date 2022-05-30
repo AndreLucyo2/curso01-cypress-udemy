@@ -23,7 +23,7 @@ describe('Sholud test at a functional level', () => {
 
     });
 
-    it.only('Create an account', () => {
+    it('Create an account', () => {
         //Arrange
         cy.get(elements.MENU.SETTINGS).click();
         cy.get(elements.MENU.CONTAS).click();
@@ -37,26 +37,27 @@ describe('Sholud test at a functional level', () => {
 
     });
 
-    it('Update an Count', () => {
+    it.only('Update an Count', () => {
         //Arrange
         const nmConta = 'Conta Teste - ' + Date.now();
         const nmContaEdit = 'Conta Editada - ' + Date.now();
         //Criar conta:
-        cy.get('[data-test="menu-settings"]').click();
-        cy.get('[href="/contas"]').click();
-        cy.get('[data-test="nome"]').should('be.visible').type(nmConta)
-        cy.get('.btn').should('be.visible').click();
-       
+        cy.get(elements.MENU.SETTINGS).click();
+        cy.get(elements.MENU.CONTAS).click();
+        cy.get(elements.CONTAS.NOME).should('be.visible').type(nmConta)
+        cy.get(elements.CONTAS.BTN_SALVAR).should('be.visible').click();
+
         //Act
         //Editar:
-        cy.get('.table').should('be.visible').children().contains(nmConta).click();
         cy.xpath(`//table//td[contains(.,'${nmConta}')]/..//i[@class='far fa-edit']`).click()
         //Limpo o campo e altero o nome:
-        cy.get('[data-test="nome"]').should('be.visible').clear().type(nmContaEdit);
-        cy.get('.btn').should('be.visible').click();
+        cy.get(elements.CONTAS.NOME).should('be.visible')
+            .clear()
+            .type(nmContaEdit);
+        cy.get(elements.CONTAS.BTN_SALVAR).should('be.visible').click();
 
         //Assert
-        cy.get('.toast-message').should('contain', 'Conta atualizada com sucesso');
+        cy.get(elements.MESSAGE).should('contain', 'Conta atualizada com sucesso');
 
     });
 
