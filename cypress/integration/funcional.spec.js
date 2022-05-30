@@ -1,6 +1,8 @@
 
 ///<reference types = "cypress"/>
 
+import elements from '../support/locators.js'
+
 describe('Sholud test at a functional level', () => {
 
     before(() => {
@@ -10,28 +12,28 @@ describe('Sholud test at a functional level', () => {
 
     xit('Login', () => {
         //Arrange
-        cy.get('.input-group > .form-control').type('andre.lucyo2@gmail.com')
-        cy.get('[data-test="passwd"]').type('123456');
+        cy.get(elements.LOGIN.USER).type('andre.lucyo2@gmail.com')
+        cy.get(elements.LOGIN.PASSWORD).type('123456');
 
         //Act
-        cy.get('.btn').should('be.visible').click();
+        cy.get(elements.LOGIN.BTN_LOGIN).should('be.visible').click();
 
         //Assert:
-        cy.get('.toast-message').should('contain', 'Bem vindo');
+        cy.get(elements.MESSAGE).should('contain', 'Bem vindo');
 
     });
 
-    it('Create an account', () => {
+    it.only('Create an account', () => {
         //Arrange
-        cy.get('[data-test="menu-settings"]').click();
-        cy.get('[href="/contas"]').click();
-        cy.get('[data-test="nome"]').should('be.visible').type('Conta Teste - ' + Date.now())
+        cy.get(elements.MENU.SETTINGS).click();
+        cy.get(elements.MENU.CONTAS).click();
+        cy.get(elements.CONTAS.NOME).should('be.visible').type('Conta Teste - ' + Date.now())
 
         //Act
-        cy.get('.btn').should('be.visible').click();
+        cy.get(elements.CONTAS.BTN_SALVAR).should('be.visible').click();
 
         //Assert
-        cy.get('.toast-message').should('contain', 'Conta inserida com sucesso');
+        cy.get(elements.MESSAGE).should('contain', 'Conta inserida com sucesso');
 
     });
 
@@ -39,14 +41,14 @@ describe('Sholud test at a functional level', () => {
         //Arrange
         const nmConta = 'Conta Teste - ' + Date.now();
         const nmContaEdit = 'Conta Editada - ' + Date.now();
-        //Crio uma conta:
+        //Criar conta:
         cy.get('[data-test="menu-settings"]').click();
         cy.get('[href="/contas"]').click();
         cy.get('[data-test="nome"]').should('be.visible').type(nmConta)
         cy.get('.btn').should('be.visible').click();
        
         //Act
-        //Seleciono e clico em editar:
+        //Editar:
         cy.get('.table').should('be.visible').children().contains(nmConta).click();
         cy.xpath(`//table//td[contains(.,'${nmConta}')]/..//i[@class='far fa-edit']`).click()
         //Limpo o campo e altero o nome:

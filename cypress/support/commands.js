@@ -35,8 +35,9 @@ Cypress.Commands.add('clickAlert', (locator, message)=>{
 
 //----------------------------------------------------------------------------
 //Comando para fazer login: Seção 09
-Cypress.Commands.add('login',(email,senha)=>{
-    cy.get('.input-group > .form-control').type(email)
-    cy.get('[data-test="passwd"]').type(senha);
-    cy.get('.btn').click();    
+import elements from './locators.js'
+Cypress.Commands.add('login',(email,senha)=>{    
+    cy.get(elements.LOGIN.USER).type(email)
+    cy.get(elements.LOGIN.PASSWORD).type(senha);
+    cy.get(elements.LOGIN.BTN_LOGIN).click();    
 })
