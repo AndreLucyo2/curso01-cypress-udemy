@@ -26,18 +26,28 @@
 
 //----------------------------------------------------------------------------
 //Comandos personalizados: Seção8 aula commands
-Cypress.Commands.add('clickAlert', (locator, message)=>{
+Cypress.Commands.add('clickAlert', (locator, message) => {
     cy.get(locator).click()
-    cy.on('window:alert', msg=> {
+    cy.on('window:alert', msg => {
         expect(msg).to.be.equal(message)
-    })                                         
+    })
 })
 
+import { get } from 'lodash'
 //----------------------------------------------------------------------------
-//Comando para fazer login: Seção 09
+//impor page objects:
 import elements from './locators.js'
-Cypress.Commands.add('login',(email,senha)=>{    
+
+//Comando para fazer login: Seção 09
+Cypress.Commands.add('login', (email, senha) => {
     cy.get(elements.LOGIN.USER).type(email)
     cy.get(elements.LOGIN.PASSWORD).type(senha);
-    cy.get(elements.LOGIN.BTN_LOGIN).click();    
+    cy.get(elements.LOGIN.BTN_LOGIN).click();
+    cy.get(elements.MESSAGE).should('contain', 'Bem vindo');
 })
+
+Cypress.Commands.add('resetApp', () => {
+    cy.get(elements.MENU.SETTINGS).click();
+    cy.get(elements.MENU.RESET).click();
+})
+

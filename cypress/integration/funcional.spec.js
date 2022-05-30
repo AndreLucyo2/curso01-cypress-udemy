@@ -8,6 +8,7 @@ describe('Sholud test at a functional level', () => {
     before(() => {
         cy.visit('https://barrigareact.wcaquino.me/')
         cy.login('andre.lucyo2@gmail.com', '123456');
+        cy.resetApp();
     });
 
     xit('Login', () => {
@@ -20,7 +21,6 @@ describe('Sholud test at a functional level', () => {
 
         //Assert:
         cy.get(elements.MESSAGE).should('contain', 'Bem vindo');
-
     });
 
     it('Create an account', () => {
@@ -37,7 +37,7 @@ describe('Sholud test at a functional level', () => {
 
     });
 
-    it.only('Update an Count', () => {
+    it('Update an Count', () => {
         //Arrange
         const nmConta = 'Conta Teste - ' + Date.now();
         const nmContaEdit = 'Conta Editada - ' + Date.now();
