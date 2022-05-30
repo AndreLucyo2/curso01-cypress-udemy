@@ -25,11 +25,11 @@ describe('Sholud test at a functional level', () => {
 
     it('Create an account', () => {
         //Arrange
-        const nmConta = 'Conta Teste - ' + Date.now();        
+        const nmConta = 'Conta Teste - ' + Date.now();
         cy.get(elements.MENU.SETTINGS).click();
         cy.get(elements.MENU.CONTAS).click();
         cy.get(elements.CONTAS.NOME).should('be.visible').type('Conta Teste - ' + Date.now())
-        
+
         //Act
         cy.get(elements.CONTAS.BTN_SALVAR).should('be.visible').click();
 
@@ -38,7 +38,7 @@ describe('Sholud test at a functional level', () => {
 
     });
 
-    it.only('Update an Count', () => {
+    it('Update an Count', () => {
         //Arrange
         const nmConta = 'Conta Teste - ' + Date.now();
         const nmContaEdit = 'Conta Editada - ' + Date.now();
@@ -54,6 +54,32 @@ describe('Sholud test at a functional level', () => {
 
         //Assert
         cy.get(elements.MESSAGE).should('contain', 'Conta atualizada com sucesso');
+
+    });
+
+    it.only('Create an duplicate Count', () => {
+        //Arrange
+        const nmConta1 = 'Conta Teste1 - ' + Date.now();
+        const nmConta2 = 'Conta Teste2 - ' + Date.now();
+        cy.acessarMenuConta();
+        cy.inserirConta(nmConta1);
+        cy.acessarMenuConta();
+        cy.inserirConta(nmConta2);
+
+        //Act
+        cy.xpath(`//table//td[contains(.,'${nmConta1}')]/..//i[@class='far fa-edit']`).should('be.visible').click()
+        cy.get(elements.CONTAS.NOME).should('be.visible')
+            .clear()
+            .type(nmConta2);
+        cy.get(elements.CONTAS.BTN_SALVAR).should('be.visible').click();
+
+        //Assert
+        cy.get(elements.MESSAGE).should('be.visible')
+            .should('contain', 'code 400');
+
+        //Teste função javaScript
+        const texto = (nome,sobrenome) => `Nome: ${nome} \nSobre Nome: ${sobrenome}`
+        console.log(texto('Andre','Lucio'));
 
     });
 

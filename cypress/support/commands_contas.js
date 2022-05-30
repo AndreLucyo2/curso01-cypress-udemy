@@ -12,4 +12,3 @@ Cypress.Commands.add('inserirConta',(conta)=>{
     cy.get(elements.CONTAS.BTN_SALVAR).click();
 })
 
-
