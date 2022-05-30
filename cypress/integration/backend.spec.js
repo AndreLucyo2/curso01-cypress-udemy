@@ -12,7 +12,7 @@ describe('Sholud test at a functional level', () => {
                 senha: "123456",
                 redirecionar: false
             }
-        }).then(resp => console.log(resp));
+        }).its('body.token').should('not.be.empty') //.then(resp => console.log(resp));
     });
 
 })
