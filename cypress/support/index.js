@@ -15,6 +15,7 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+import './commands_contas'
 
 //locator com xpatch -- instalar plugin : seção 7 Xpath
 // https://docs.cypress.io/plugins/directory

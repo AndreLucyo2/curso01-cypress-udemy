@@ -33,7 +33,6 @@ Cypress.Commands.add('clickAlert', (locator, message) => {
     })
 })
 
-import { get } from 'lodash'
 //----------------------------------------------------------------------------
 //impor page objects:
 import elements from './locators.js'

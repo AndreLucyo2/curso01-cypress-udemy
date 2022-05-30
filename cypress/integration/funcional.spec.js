@@ -25,10 +25,11 @@ describe('Sholud test at a functional level', () => {
 
     it('Create an account', () => {
         //Arrange
+        const nmConta = 'Conta Teste - ' + Date.now();        
         cy.get(elements.MENU.SETTINGS).click();
         cy.get(elements.MENU.CONTAS).click();
         cy.get(elements.CONTAS.NOME).should('be.visible').type('Conta Teste - ' + Date.now())
-
+        
         //Act
         cy.get(elements.CONTAS.BTN_SALVAR).should('be.visible').click();
 
@@ -37,20 +38,15 @@ describe('Sholud test at a functional level', () => {
 
     });
 
-    it('Update an Count', () => {
+    it.only('Update an Count', () => {
         //Arrange
         const nmConta = 'Conta Teste - ' + Date.now();
         const nmContaEdit = 'Conta Editada - ' + Date.now();
-        //Criar conta:
-        cy.get(elements.MENU.SETTINGS).click();
-        cy.get(elements.MENU.CONTAS).click();
-        cy.get(elements.CONTAS.NOME).should('be.visible').type(nmConta)
-        cy.get(elements.CONTAS.BTN_SALVAR).should('be.visible').click();
+        cy.acessarMenuConta();
+        cy.inserirConta(nmConta);
 
         //Act
-        //Editar:
         cy.xpath(`//table//td[contains(.,'${nmConta}')]/..//i[@class='far fa-edit']`).click()
-        //Limpo o campo e altero o nome:
         cy.get(elements.CONTAS.NOME).should('be.visible')
             .clear()
             .type(nmContaEdit);
