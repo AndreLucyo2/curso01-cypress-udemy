@@ -13,6 +13,16 @@ describe('Sholud test at a functional level', () => {
                 redirecionar: false
             }
         }).its('body.token').should('not.be.empty') //.then(resp => console.log(resp));
+
+        cy.request({
+            url:'https://barrigarest.wcaquino.me/contas',
+            method:'POST',
+            body:{
+                nome:'Conta criada - rest_001'
+            }
+        }).then(resp=>{ console.log(resp)})
     });
+
+
 
 })

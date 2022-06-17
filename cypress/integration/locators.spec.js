@@ -28,8 +28,6 @@ describe('Work with basic elements', () => {
         //navegando pela linha:
         cy.get('table#tabelaUsuarios tr:contains("Doutorado"):eq(0) td:eq(6) input')
 
-
-
     });
 
 
