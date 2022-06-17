@@ -1,6 +1,8 @@
 
 ///<reference types = "cypress"/>
 
+import { random } from "lodash";
+
 describe('Sholud test at a functional level', () => {
 
     //Guardar o token para usar em mais testes
@@ -44,7 +46,7 @@ describe('Sholud test at a functional level', () => {
 
         //Asserts:
         cy.get('@response').then(resp => {
-            //cy.log(resp);
+            cy.log(resp);
 
             //Testa se retornou sucesso:
             expect(resp.status).to.be.equals(201);
@@ -57,17 +59,46 @@ describe('Sholud test at a functional level', () => {
 
     });
 
-    it('Update a account', () => {
+    it.only('Update a account', () => {
 
         //Arrange:
-        const fakeNomeConta = 'Conta criada pela api REST_99'
-        cy.cmdAddAccount(fakeNomeConta);
+        const fakeNomeConta = 'Conta criada pela api REST - ' + random(0, 100);
+        const fakeNomeContaEditada = 'Conta alterada via api REST - ' + random(0, 100);
 
+        //Cria uma nova conta:
+        cy.cmdAddAccount(fakeNomeConta).then(obj => {            
+           
+            //Act 
+            //Faz o update:
+            cy.request({
+                url: Cypress.config().baseApiUrl + '/contas/' + obj.id,
+                method: 'PUT',
+                headers: { Authorization: `JWT ${token}` },
+                body: {
+                    nome: fakeNomeContaEditada
+                }
+            }).as('response');
 
-        //Act
-
+        });
+        
         //Asserts:
+        cy.get('@response').its('status').should('be.equal', 200);
 
+        //fazer uma consulta pelo nome da conta altera: 
+        cy.request({
+
+            method: 'GET',
+            url: Cypress.config().baseApiUrl + '/contas',
+            headers: { Authorization: `JWT ${token}` },
+            //refinamento da consulta na api: queryString
+            qs: { 
+                nome: fakeNomeContaEditada 
+            } 
+            
+        }).then(resp => {
+            expect(resp.body[0].nome).to.be.equals(fakeNomeContaEditada);
+        })
     });
+
 
 })

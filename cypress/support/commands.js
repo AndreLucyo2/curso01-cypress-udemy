@@ -95,11 +95,12 @@ Cypress.Commands.add('cmdResetRest', (token) => {
         .log('Reset bank ok!')
 })
 
-
 //Adiciona uma nova conta pelo backend:
 Cypress.Commands.add('cmdAddAccount', (nomeConta) => {
 
     cy.cmdGetTokenOculto().then(token => {
+        //Cria a conta:
+        var obj;
         cy.request({
             url: Cypress.config().baseApiUrl + '/contas',
             method: 'POST',
@@ -107,8 +108,16 @@ Cypress.Commands.add('cmdAddAccount', (nomeConta) => {
             body: {
                 nome: nomeConta
             }
-        })
-        cy.log('Conta criada:' + nomeConta);
+        }).as('response')
+        
+        //Valida e retorna o json do obj gerado
+        cy.get('@response').then(resp => {
+            //console.log(resp.body);
+            expect(resp.body.id).not.be.equal(0);            
+            return resp.body;
+        })  
+        cy.log('Conta criada: '+ nomeConta)
+        
     })
 
 })
