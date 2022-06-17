@@ -17,8 +17,7 @@ describe('Sholud test at a functional level', () => {
     beforeEach(() => {
         //cy.resetApp();
     });
-    
-    
+        
     it('Create an account', () => {
         
         const fakeNomeConta = 'Conta criada - rest_0xx'
