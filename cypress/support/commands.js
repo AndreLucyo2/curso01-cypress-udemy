@@ -53,7 +53,7 @@ Cypress.Commands.add('resetApp', () => {
 //Metodo para retornar o tokem da requisição de login
 Cypress.Commands.add('getToken', (user, passwd) => {
     cy.request({
-        url: '/signin',
+        url: Cypress.config().baseApiUrl + '/signin',
         method: 'POST',
         body: {
             email: user,
@@ -67,9 +67,27 @@ Cypress.Commands.add('getToken', (user, passwd) => {
         })
 });
 
+//Metodo para retornar o tokem da requisição de login
+//Pega os dados de acesso do arquivo interno do cypress ...\cypress.env.json
+Cypress.Commands.add('getTokenOculto', () => {
+    cy.request({
+        url: Cypress.config().baseApiUrl + '/signin',
+        method: 'POST',
+        body: {
+            email: Cypress.env('User_Email'),
+            senha: Cypress.env('User_Password'),
+            redirecionar: false
+        }
+    }).its('body.token').should('not.be.empty') //.then(resp => console.log(resp));
+        //Obtem o tokem a partir do login: Faz o POST de uma nova conta
+        .then(token => {
+            return token;
+        })
+});
+
 Cypress.Commands.add('resetRest', (token) => {
     cy.request({
-        url: '/reset',
+        url: Cypress.config().baseApiUrl + '/reset',
         method: 'GET',
         headers: { Authorization: `JWT ${token}` }
     }).its('status').should('be.equal', 200)
