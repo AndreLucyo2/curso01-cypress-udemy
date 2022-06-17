@@ -100,11 +100,9 @@ describe('Sholud test at a functional level', () => {
         })
     });
 
-    it.only('Should not create an account with same name', () => {
+    it('Should not create an account with same name', () => {
         //Arrange:
-        const fakeNomeConta1 = 'Conta criada pela api RESTxxxx - ' + random(0, 100000);
-        const fakeNomeConta2 = fakeNomeConta1; 
-
+        const fakeNomeConta1 = 'Conta criada pela api RESTxxxx - ' + random(0, 100000);        
         //Cria uma nova conta:
         cy.cmdAddAccount(fakeNomeConta1);
 
@@ -120,8 +118,7 @@ describe('Sholud test at a functional level', () => {
             failOnStatusCode: false
         }).as('response')
 
-        //Asserts:
-        //Valida e retorna o json do obj gerado
+        //Asserts:        
         cy.get('@response').then(resp => {
             //console.log(resp);
             expect(resp.status).to.be.equal(400);
