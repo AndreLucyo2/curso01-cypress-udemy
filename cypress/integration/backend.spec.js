@@ -23,8 +23,9 @@ describe('Sholud test at a functional level', () => {
         
         const fakeNomeConta = 'Conta criada pela api REST_01'
         
+        //Adiciona uma nova conta pelo backend:
         cy.request({
-            url: 'https://barrigarest.wcaquino.me/contas',
+            url: '/contas',
             method: 'POST',
             headers: { Authorization: `JWT ${token}` },
             body: {

@@ -53,8 +53,8 @@ Cypress.Commands.add('resetApp', () => {
 //Metodo para retornar o tokem da requisição de login
 Cypress.Commands.add('getToken', (user, passwd) => {
     cy.request({
+        url: '/signin',
         method: 'POST',
-        url: 'https://barrigarest.wcaquino.me/signin',
         body: {
             email: user,
             senha: passwd,
@@ -69,8 +69,8 @@ Cypress.Commands.add('getToken', (user, passwd) => {
 
 Cypress.Commands.add('resetRest', (token) => {
     cy.request({
+        url: '/reset',
         method: 'GET',
-        url: 'https://barrigarest.wcaquino.me/reset',
         headers: { Authorization: `JWT ${token}` }
     }).its('status').should('be.equal', 200)
         .log('Reset bank ok!')
