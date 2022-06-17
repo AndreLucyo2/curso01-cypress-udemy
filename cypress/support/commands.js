@@ -67,3 +67,11 @@ Cypress.Commands.add('getToken', (user, passwd) => {
         })
 });
 
+Cypress.Commands.add('resetRest', (token) => {
+    cy.request({
+        method: 'GET',
+        url: 'https://barrigarest.wcaquino.me/reset',
+        headers: { Authorization: `JWT ${token}` }
+    }).its('status').should('be.equal', 200)
+        .log('Reset bank ok!')
+})

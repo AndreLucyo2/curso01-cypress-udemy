@@ -15,12 +15,13 @@ describe('Sholud test at a functional level', () => {
     });
     
     beforeEach(() => {
-        //cy.resetApp();
+        //Reseta dados do usuario:
+        cy.resetRest(token);
     });
         
     it('Create an account', () => {
         
-        const fakeNomeConta = 'Conta criada - rest_0xx'
+        const fakeNomeConta = 'Conta criada pela api REST_01'
         
         cy.request({
             url: 'https://barrigarest.wcaquino.me/contas',
