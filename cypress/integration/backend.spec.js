@@ -59,15 +59,15 @@ describe('Sholud test at a functional level', () => {
 
     });
 
-    it.only('Update a account', () => {
+    it('Update a account', () => {
 
         //Arrange:
         const fakeNomeConta = 'Conta criada pela api REST - ' + random(0, 100);
         const fakeNomeContaEditada = 'Conta alterada via api REST - ' + random(0, 100);
 
         //Cria uma nova conta:
-        cy.cmdAddAccount(fakeNomeConta).then(obj => {            
-           
+        cy.cmdAddAccount(fakeNomeConta).then(obj => {
+
             //Act 
             //Faz o update:
             cy.request({
@@ -80,7 +80,7 @@ describe('Sholud test at a functional level', () => {
             }).as('response');
 
         });
-        
+
         //Asserts:
         cy.get('@response').its('status').should('be.equal', 200);
 
@@ -91,14 +91,43 @@ describe('Sholud test at a functional level', () => {
             url: Cypress.config().baseApiUrl + '/contas',
             headers: { Authorization: `JWT ${token}` },
             //refinamento da consulta na api: queryString
-            qs: { 
-                nome: fakeNomeContaEditada 
-            } 
-            
+            qs: {
+                nome: fakeNomeContaEditada
+            }
+
         }).then(resp => {
             expect(resp.body[0].nome).to.be.equals(fakeNomeContaEditada);
         })
     });
 
+    it.only('Should not create an account with same name', () => {
+        //Arrange:
+        const fakeNomeConta1 = 'Conta criada pela api RESTxxxx - ' + random(0, 100000);
+        const fakeNomeConta2 = fakeNomeConta1; 
+
+        //Cria uma nova conta:
+        cy.cmdAddAccount(fakeNomeConta1);
+
+        //Act:
+        //Tentar criar uma conta com o mesmo nome
+        cy.request({
+            url: Cypress.config().baseApiUrl + '/contas',
+            method: 'POST',
+            headers: { Authorization: `JWT ${token}` },
+            body: {
+                nome: fakeNomeConta1
+            },
+            failOnStatusCode: false
+        }).as('response')
+
+        //Asserts:
+        //Valida e retorna o json do obj gerado
+        cy.get('@response').then(resp => {
+            //console.log(resp);
+            expect(resp.status).to.be.equal(400);
+            expect(resp.body.error).to.be.equal('Já existe uma conta com esse nome!');
+        });
+
+    });
 
 })
