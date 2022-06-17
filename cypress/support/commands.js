@@ -33,7 +33,7 @@ Cypress.Commands.add('clickAlert', (locator, message) => {
     })
 })
 
-//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
 //impor page objects:
 import elements from './locators.js'
 
@@ -50,8 +50,9 @@ Cypress.Commands.add('resetApp', () => {
     cy.get(elements.MENU.RESET).click();
 });
 
+//CMD para API ------------------------------------------------------------------------
 //Metodo para retornar o tokem da requisição de login
-Cypress.Commands.add('getToken', (user, passwd) => {
+Cypress.Commands.add('cmdGetToken', (user, passwd) => {
     cy.request({
         url: Cypress.config().baseApiUrl + '/signin',
         method: 'POST',
@@ -69,7 +70,7 @@ Cypress.Commands.add('getToken', (user, passwd) => {
 
 //Metodo para retornar o tokem da requisição de login
 //Pega os dados de acesso do arquivo interno do cypress ...\cypress.env.json
-Cypress.Commands.add('getTokenOculto', () => {
+Cypress.Commands.add('cmdGetTokenOculto', () => {
     cy.request({
         url: Cypress.config().baseApiUrl + '/signin',
         method: 'POST',
@@ -85,11 +86,29 @@ Cypress.Commands.add('getTokenOculto', () => {
         })
 });
 
-Cypress.Commands.add('resetRest', (token) => {
+Cypress.Commands.add('cmdResetRest', (token) => {
     cy.request({
         url: Cypress.config().baseApiUrl + '/reset',
         method: 'GET',
         headers: { Authorization: `JWT ${token}` }
     }).its('status').should('be.equal', 200)
         .log('Reset bank ok!')
+})
+
+
+//Adiciona uma nova conta pelo backend:
+Cypress.Commands.add('cmdAddAccount', (nomeConta) => {
+
+    cy.cmdGetTokenOculto().then(token => {
+        cy.request({
+            url: Cypress.config().baseApiUrl + '/contas',
+            method: 'POST',
+            headers: { Authorization: `JWT ${token}` },
+            body: {
+                nome: nomeConta
+            }
+        })
+        cy.log('Conta criada:' + nomeConta);
+    })
+
 })
