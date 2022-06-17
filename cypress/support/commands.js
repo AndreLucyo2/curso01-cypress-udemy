@@ -43,10 +43,27 @@ Cypress.Commands.add('login', (email, senha) => {
     cy.get(elements.LOGIN.PASSWORD).type(senha);
     cy.get(elements.LOGIN.BTN_LOGIN).click();
     cy.get(elements.MESSAGE).should('contain', 'Bem vindo');
-})
+});
 
 Cypress.Commands.add('resetApp', () => {
     cy.get(elements.MENU.SETTINGS).click();
     cy.get(elements.MENU.RESET).click();
-})
+});
+
+//Metodo para retornar o tokem da requisição de login
+Cypress.Commands.add('getToken', (user, passwd) => {
+    cy.request({
+        method: 'POST',
+        url: 'https://barrigarest.wcaquino.me/signin',
+        body: {
+            email: user,
+            senha: passwd,
+            redirecionar: false
+        }
+    }).its('body.token').should('not.be.empty') //.then(resp => console.log(resp));
+        //Obtem o tokem a partir do login: Faz o POST de uma nova conta
+        .then(token => {
+            return token;
+        })
+});
 
