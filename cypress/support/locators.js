@@ -5,6 +5,7 @@ const locators = {
         BTN_LOGIN: '.btn'
     },
     MENU: {
+        HOME:'[data-test="menu-home"]',
         SETTINGS: '[data-test="menu-settings"]',
         CONTAS: '[href="/contas"]',
         RESET : '[href="/reset"]'
