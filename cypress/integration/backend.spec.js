@@ -1,6 +1,5 @@
 
 ///<reference types = "cypress"/>
-
 import { random } from "lodash";
 
 describe('Sholud test at a functional level', () => {
@@ -102,7 +101,7 @@ describe('Sholud test at a functional level', () => {
 
     it('Should not create an account with same name', () => {
         //Arrange:
-        const fakeNomeConta1 = 'Conta criada pela api RESTxxxx - ' + random(0, 100000);        
+        const fakeNomeConta1 = 'Conta criada pela api RESTxxxx - ' + random(0, 100000);
         //Cria uma nova conta:
         cy.cmdAddAccount(fakeNomeConta1);
 
@@ -127,4 +126,68 @@ describe('Sholud test at a functional level', () => {
 
     });
 
+    //foramtar datas em js: https://blog.betrybe.com/javascript/javascript-date-format/
+    it.only('Should create a transaction', () => {
+        //Arrange:
+        //Cria uma data formatada:
+        let data = new Date();
+        let dataFormatada = (adicionaZero(data.getDate())) + "/" + (adicionaZero(data.getMonth() + 1)) + "/" + data.getFullYear();
+
+        //Cria uma conta:
+        const fakeNomeConta = 'Conta criada para transações - ' + random(0, 100000);
+        cy.cmdAddAccount(fakeNomeConta);
+
+        //Adiciona a transação
+        cy.getContaByName(fakeNomeConta).then(obj => {
+            //console.log(obj);
+
+            cy.request({
+                url: Cypress.config().baseApiUrl + '/transacoes',
+                method: 'POST',
+                headers: { Authorization: `JWT ${token}` },
+                body: {
+                    conta_id: obj.id,
+                    data_pagamento: dataFormatada,
+                    data_transacao: dataFormatada,
+                    descricao: "Aluguel do mes de maio",
+                    envolvido: "Seu Barriga",
+                    status: true,
+                    tipo: "REC",
+                    valor: "1560"
+                }
+            })
+
+        })
+
+        //Act:
+
+        //Asserts:
+
+    });
+
+    it('Should get balance', () => {
+        //Arrange:
+
+        //Act:
+
+        //Asserts: 
+    });
+
+    it('Should remove a transaction', () => {
+        //Arrange:
+
+        //Act:
+
+        //Asserts:
+    });
+
 })
+
+//Adiciona zero em data: recebe 1 retornar 01
+//ref: https://blog.betrybe.com/javascript/javascript-date-format/
+function adicionaZero(numero){
+    if (numero <= 9) 
+        return "0" + numero;
+    else
+        return numero; 
+}

@@ -121,3 +121,22 @@ Cypress.Commands.add('cmdAddAccount', (nomeConta) => {
     })
 
 })
+
+
+Cypress.Commands.add('getContaByName',(nomeConta)=>{
+    cy.cmdGetTokenOculto().then(token => {
+        //Cria a conta:
+        var obj;
+        cy.request({
+            url: Cypress.config().baseApiUrl + '/contas',
+            method: 'GET',
+            headers: { Authorization: `JWT ${token}` },
+            qs: {
+                nome: nomeConta
+            }
+        }).then(resp => {         
+            return resp.body[0];
+        });
+
+    })
+})
