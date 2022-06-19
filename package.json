@@ -125,6 +125,7 @@
     "mimic-fn": "^2.1.0",
     "minimatch": "^3.1.2",
     "minimist": "^1.2.6",
+    "moment": "^2.29.3",
     "ms": "^2.1.2",
     "npm-run-path": "^4.0.1",
     "once": "^1.4.0",

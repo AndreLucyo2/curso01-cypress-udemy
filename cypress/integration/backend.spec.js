@@ -127,41 +127,44 @@ describe('Sholud test at a functional level', () => {
     });
 
     //foramtar datas em js: https://blog.betrybe.com/javascript/javascript-date-format/
+    //ref: https://www.devmedia.com.br/javascript-date-trabalhando-com-data-e-hora/40649
     it.only('Should create a transaction', () => {
         //Arrange:
         //Cria uma data formatada:
         let data = new Date();
-        let dataFormatada = (adicionaZero(data.getDate())) + "/" + (adicionaZero(data.getMonth() + 1)) + "/" + data.getFullYear();
+        let dataPagtoTransact = (adicionaZero(data.getDate())) + "/" + (adicionaZero(data.getMonth() + 1)) + "/" + data.getFullYear();
+        let dataPagtoFormatada =(adicionaZero(data.getDate()+1)) + "/" + (adicionaZero(data.getMonth() + 1)) + "/" + data.getFullYear();
 
         //Cria uma conta:
         const fakeNomeConta = 'Conta criada para transações - ' + random(0, 100000);
         cy.cmdAddAccount(fakeNomeConta);
-
+        
+        //Act:
         //Adiciona a transação
         cy.getContaByName(fakeNomeConta).then(obj => {
             //console.log(obj);
-
             cy.request({
                 url: Cypress.config().baseApiUrl + '/transacoes',
                 method: 'POST',
                 headers: { Authorization: `JWT ${token}` },
                 body: {
                     conta_id: obj.id,
-                    data_pagamento: dataFormatada,
-                    data_transacao: dataFormatada,
+                    data_pagamento: dataPagtoFormatada,
+                    data_transacao: dataPagtoTransact,
                     descricao: "Aluguel do mes de maio",
                     envolvido: "Seu Barriga",
                     status: true,
                     tipo: "REC",
                     valor: "1560"
                 }
-            })
-
+            }).as('response');
         })
 
-        //Act:
 
         //Asserts:
+        cy.get('@response').its('status').should('be.equal',201);
+        //Valida se recebeu o id:
+        cy.get('@response').its('body.id').should('exist');
 
     });
 
@@ -185,9 +188,9 @@ describe('Sholud test at a functional level', () => {
 
 //Adiciona zero em data: recebe 1 retornar 01
 //ref: https://blog.betrybe.com/javascript/javascript-date-format/
-function adicionaZero(numero){
-    if (numero <= 9) 
+function adicionaZero(numero) {
+    if (numero <= 9)
         return "0" + numero;
     else
-        return numero; 
+        return numero;
 }
