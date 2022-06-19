@@ -5,7 +5,7 @@ import { random } from "lodash";
 describe('Sholud test at a functional level', () => {
 
     //Guardar o token para usar em mais testes
-    let token;
+    //let token;
 
     //Antes de executar o teste, ele recupera o token
     before(() => {
@@ -16,15 +16,21 @@ describe('Sholud test at a functional level', () => {
         // })
 
         //Recupera o token utilizando dados de acesso oculto no cypress.env.json
-        cy.cmdGetTokenOculto().then(tkn => {
-            token = tkn;
-        })
+        // cy.cmdGetTokenOculto().then(tkn => {
+        //     token = tkn;
+        // })
+
+        //Foi sobrescrito o metodo request, basta apenas executar o getToken
+        //para salvar nas variaveis de ambiente do cypress
+        cy.cmdGetTokenOculto();
 
     });
 
     beforeEach(() => {
         //Reseta dados do usuario:
-        cy.cmdResetRest(token);
+        cy.cmdGetTokenOculto().then(token => {
+            cy.cmdResetRest(token);
+        })
     });
 
     it('Create an account', () => {
@@ -37,7 +43,7 @@ describe('Sholud test at a functional level', () => {
         cy.request({
             url: '/contas',
             method: 'POST',
-            headers: { Authorization: `JWT ${token}` },
+            //headers: { Authorization: `JWT ${token}` },
             body: {
                 nome: fakeNomeConta
             }
@@ -66,13 +72,12 @@ describe('Sholud test at a functional level', () => {
 
         //Cria uma nova conta:
         cy.cmdAddAccount(fakeNomeConta).then(obj => {
-
             //Act 
             //Faz o update:
             cy.request({
                 url: Cypress.config().baseApiUrl + '/contas/' + obj.id,
                 method: 'PUT',
-                headers: { Authorization: `JWT ${token}` },
+                //headers: { Authorization: `JWT ${token}` },
                 body: {
                     nome: fakeNomeContaEditada
                 }
@@ -88,7 +93,7 @@ describe('Sholud test at a functional level', () => {
 
             method: 'GET',
             url: Cypress.config().baseApiUrl + '/contas',
-            headers: { Authorization: `JWT ${token}` },
+            //headers: { Authorization: `JWT ${token}` },
             //refinamento da consulta na api: queryString
             qs: {
                 nome: fakeNomeContaEditada
@@ -110,7 +115,7 @@ describe('Sholud test at a functional level', () => {
         cy.request({
             url: Cypress.config().baseApiUrl + '/contas',
             method: 'POST',
-            headers: { Authorization: `JWT ${token}` },
+            //headers: { Authorization: `JWT ${token}` },
             body: {
                 nome: fakeNomeConta1
             },
@@ -146,7 +151,7 @@ describe('Sholud test at a functional level', () => {
             cy.request({
                 url: Cypress.config().baseApiUrl + '/transacoes',
                 method: 'POST',
-                headers: { Authorization: `JWT ${token}` },
+                //headers: { Authorization: `JWT ${token}` },
                 body: {
                     conta_id: obj.id,
                     data_pagamento: dataPagtoFormatada,
@@ -173,7 +178,7 @@ describe('Sholud test at a functional level', () => {
         cy.request({
             url: Cypress.config().baseApiUrl + '/saldo',
             method: 'GET',
-            headers: { Authorization: `JWT ${token}` },
+            //headers: { Authorization: `JWT ${token}` },
 
         }).then(resp => {
             console.log(resp)
@@ -196,7 +201,7 @@ describe('Sholud test at a functional level', () => {
         //Asserts: 
     });
 
-    it.only('Should remove a transaction', () => {
+    it('Should remove a transaction', () => {
         //Arrange:
         //Cria uma data formatada:
         let data = new Date();
@@ -214,7 +219,7 @@ describe('Sholud test at a functional level', () => {
             cy.request({
                 url: Cypress.config().baseApiUrl + '/transacoes',
                 method: 'POST',
-                headers: { Authorization: `JWT ${token}` },
+                //headers: { Authorization: `JWT ${token}` },
                 body: {
                     conta_id: obj.id,
                     data_pagamento: dataPagtoFormatada,
@@ -230,7 +235,7 @@ describe('Sholud test at a functional level', () => {
             cy.request({
                 url: Cypress.config().baseApiUrl + '/transacoes',
                 method: 'POST',
-                headers: { Authorization: `JWT ${token}` },
+                //headers: { Authorization: `JWT ${token}` },
                 body: {
                     conta_id: obj.id,
                     data_pagamento: dataPagtoFormatada,
@@ -250,7 +255,7 @@ describe('Sholud test at a functional level', () => {
                 cy.request({
                     url: Cypress.config().baseApiUrl + '/transacoes/' + resp.body.id,
                     method: 'DELETE',
-                    headers: { Authorization: `JWT ${token}` },
+                    //headers: { Authorization: `JWT ${token}` },
                     body: {
                         conta_id: obj.id,
                         data_pagamento: dataPagtoFormatada,
@@ -265,7 +270,7 @@ describe('Sholud test at a functional level', () => {
                 }).its('status').should('be.equal', 204);
             });
         })
-        
+
         //Asserts:
         cy.getContaByName(fakeNomeConta).then(obj => {
             //console.log(obj)
@@ -273,7 +278,7 @@ describe('Sholud test at a functional level', () => {
             cy.request({
                 url: Cypress.config().baseApiUrl + '/saldo',
                 method: 'GET',
-                headers: { Authorization: `JWT ${token}` },
+                //headers: { Authorization: `JWT ${token}` },
 
             }).then(resp => {
                 //console.log(resp)

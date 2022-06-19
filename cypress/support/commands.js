@@ -33,6 +33,7 @@ Cypress.Commands.add('clickAlert', (locator, message) => {
     })
 })
 
+import { option } from 'commander'
 //----------------------------------------------------------------------------------
 //impor page objects:
 import elements from './locators.js'
@@ -52,21 +53,25 @@ Cypress.Commands.add('resetApp', () => {
 
 //CMD para API ------------------------------------------------------------------------
 //Metodo para retornar o tokem da requisição de login
-Cypress.Commands.add('cmdGetToken', (user, passwd) => {
-    cy.request({
-        url: Cypress.config().baseApiUrl + '/signin',
-        method: 'POST',
-        body: {
-            email: user,
-            senha: passwd,
-            redirecionar: false
-        }
-    }).its('body.token').should('not.be.empty') //.then(resp => console.log(resp));
-        //Obtem o tokem a partir do login: Faz o POST de uma nova conta
-        .then(token => {
-            return token;
-        })
-});
+// Cypress.Commands.add('cmdGetToken', (user, passwd) => {
+//     cy.request({
+//         url: Cypress.config().baseApiUrl + '/signin',
+//         method: 'POST',
+//         body: {
+//             email: user,
+//             senha: passwd,
+//             redirecionar: false
+//         }
+//     }).its('body.token').should('not.be.empty') //.then(resp => console.log(resp));
+//         //Obtem o tokem a partir do login: Faz o POST de uma nova conta
+//         .then(token => {
+//             //cria uma variavel de ambiente e salva o token
+//             Cypress.env('token', token);
+//             //continua retornando o token para quem precisa:
+//             return token;
+//         })
+// });
+
 
 //Metodo para retornar o tokem da requisição de login
 //Pega os dados de acesso do arquivo interno do cypress ...\cypress.env.json
@@ -80,17 +85,45 @@ Cypress.Commands.add('cmdGetTokenOculto', () => {
             redirecionar: false
         }
     }).its('body.token').should('not.be.empty') //.then(resp => console.log(resp));
-        //Obtem o tokem a partir do login: Faz o POST de uma nova conta
+        //Obtem o tokem a partir do login:
         .then(token => {
+            //cria uma variavel de ambiente e salva o token
+            Cypress.env('token', token);
+            //continua retornando o token para quem precisa:
             return token;
         })
 });
 
-Cypress.Commands.add('cmdResetRest', (token) => {
+//Sobrescrevendo metodo request do Cypress ára ja ter o token:
+Cypress.Commands.overwrite('request', (originalFn, ...options) => {
+    /*
+    originalFn : a função original
+    ... options : manten os parametros originais    
+    */
+
+    //Geralmente a request de teste usa apenas um objeto como parametro
+    //teste para validar se esta utilizando o sobrescrito:
+    if (options.length === 1) {
+        //Valida se tem o tokem na variavel de ambiente:
+        if (Cypress.env('token')) {
+            //Se exitir:
+            //Adiciona o tokem preenchido na request:           
+            options[0].headers = {
+                Authorization: `JWT ${Cypress.env('token')}`
+            }
+        }
+    }
+    //Caso nao existir, nada é alterado, mantem o metodo original
+    return originalFn(...options);
+})
+
+//---------------------------------------------------------------------------------------
+
+Cypress.Commands.add('cmdResetRest', () => {
     cy.request({
         url: Cypress.config().baseApiUrl + '/reset',
         method: 'GET',
-        headers: { Authorization: `JWT ${token}` }
+        //headers: { Authorization: `JWT ${token}` }
     }).its('status').should('be.equal', 200)
         .log('Reset bank ok!')
 })
@@ -98,13 +131,12 @@ Cypress.Commands.add('cmdResetRest', (token) => {
 //Adiciona uma nova conta pelo backend:
 Cypress.Commands.add('cmdAddAccount', (nomeConta) => {
 
-    cy.cmdGetTokenOculto().then(token => {
+    cy.cmdGetTokenOculto().then(() => {
         //Cria a conta:
-        var obj;
         cy.request({
             url: Cypress.config().baseApiUrl + '/contas',
             method: 'POST',
-            headers: { Authorization: `JWT ${token}` },
+            //headers: { Authorization: `JWT ${token}` },
             body: {
                 nome: nomeConta
             }
@@ -116,27 +148,21 @@ Cypress.Commands.add('cmdAddAccount', (nomeConta) => {
             expect(resp.body.id).not.be.equal(0);            
             return resp.body;
         })  
-        cy.log('Conta criada: '+ nomeConta)
-        
+        cy.log('Conta criada: '+ nomeConta);        
     })
 
 })
 
-
-Cypress.Commands.add('getContaByName',(nomeConta)=>{
-    cy.cmdGetTokenOculto().then(token => {
-        //Cria a conta:
-        var obj;
-        cy.request({
-            url: Cypress.config().baseApiUrl + '/contas',
-            method: 'GET',
-            headers: { Authorization: `JWT ${token}` },
-            qs: {
-                nome: nomeConta
-            }
-        }).then(resp => {         
-            return resp.body[0];
-        });
-
-    })
+Cypress.Commands.add('getContaByName', (nomeConta) => {
+    //Cria a conta:
+    cy.request({
+        url: Cypress.config().baseApiUrl + '/contas',
+        method: 'GET',
+        //headers: { Authorization: `JWT ${token}` },
+        qs: {
+            nome: nomeConta
+        }
+    }).then(resp => {
+        return resp.body[0];
+    });
 })
