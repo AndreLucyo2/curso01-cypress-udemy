@@ -168,7 +168,7 @@ describe('Sholud test at a functional level', () => {
 
     });
 
-    it.only('Should get balance', () => {
+    it('Should get balance', () => {
         //Arrange:
         cy.request({
             url: Cypress.config().baseApiUrl + '/saldo',
@@ -185,7 +185,7 @@ describe('Sholud test at a functional level', () => {
                     saldoConta = element.saldo;
                 }
             });
-            
+
             //checa o valor:
             expect(saldoConta).to.be.equal('534.00')
 
@@ -196,12 +196,102 @@ describe('Sholud test at a functional level', () => {
         //Asserts: 
     });
 
-    it('Should remove a transaction', () => {
+    it.only('Should remove a transaction', () => {
         //Arrange:
+        //Cria uma data formatada:
+        let data = new Date();
+        let dataPagtoTransact = (adicionaZero(data.getDate())) + "/" + (adicionaZero(data.getMonth() + 1)) + "/" + data.getFullYear();
+        let dataPagtoFormatada = (adicionaZero(data.getDate() + 1)) + "/" + (adicionaZero(data.getMonth() + 1)) + "/" + data.getFullYear();
+
+        //Cria uma nova conta: saldo zerado
+        const fakeNomeConta = 'Conta criada para Saldo - ' + random(0, 100000);
+        cy.cmdAddAccount(fakeNomeConta);
 
         //Act:
+        //Adiciona duas transações na conta criada
+        cy.getContaByName(fakeNomeConta).then(obj => {
+            //console.log(obj);
+            cy.request({
+                url: Cypress.config().baseApiUrl + '/transacoes',
+                method: 'POST',
+                headers: { Authorization: `JWT ${token}` },
+                body: {
+                    conta_id: obj.id,
+                    data_pagamento: dataPagtoFormatada,
+                    data_transacao: dataPagtoTransact,
+                    descricao: "Aluguel do mes de maio",
+                    envolvido: "Seu Barriga",
+                    status: true,
+                    tipo: "REC",
+                    valor: "2000"
+                }
+            });
 
+            cy.request({
+                url: Cypress.config().baseApiUrl + '/transacoes',
+                method: 'POST',
+                headers: { Authorization: `JWT ${token}` },
+                body: {
+                    conta_id: obj.id,
+                    data_pagamento: dataPagtoFormatada,
+                    data_transacao: dataPagtoTransact,
+                    descricao: "Aluguel do mes de maio",
+                    envolvido: "Seu Barriga",
+                    status: true,
+                    tipo: "REC",
+                    valor: "2100"
+                }
+
+            }).then(resp => {
+                //console.log(resp)
+
+                //Act:
+                //Remove uma transação criada:
+                cy.request({
+                    url: Cypress.config().baseApiUrl + '/transacoes/' + resp.body.id,
+                    method: 'DELETE',
+                    headers: { Authorization: `JWT ${token}` },
+                    body: {
+                        conta_id: obj.id,
+                        data_pagamento: dataPagtoFormatada,
+                        data_transacao: dataPagtoTransact,
+                        descricao: "Aluguel do mes de maio",
+                        envolvido: "Seu Barriga",
+                        status: true,
+                        tipo: "REC",
+                        valor: "2100"
+                    }
+                    //Garante qeu o DELETE foi executado com sucesso
+                }).its('status').should('be.equal', 204);
+            });
+        })
+        
         //Asserts:
+        cy.getContaByName(fakeNomeConta).then(obj => {
+            //console.log(obj)
+
+            cy.request({
+                url: Cypress.config().baseApiUrl + '/saldo',
+                method: 'GET',
+                headers: { Authorization: `JWT ${token}` },
+
+            }).then(resp => {
+                //console.log(resp)
+
+                let saldoConta = null;
+                //Percorre o array do body e pega o salda conta de saldo:
+                resp.body.forEach(element => {
+                    if (element.conta === obj.nome) {
+                        saldoConta = element.saldo;
+                    }
+                });
+
+                //checa o valor:
+                expect(saldoConta).to.be.equal('2000.00');
+            });
+
+        })
+
     });
 
 })
