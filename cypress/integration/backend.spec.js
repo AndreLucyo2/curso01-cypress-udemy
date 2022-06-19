@@ -128,17 +128,17 @@ describe('Sholud test at a functional level', () => {
 
     //foramtar datas em js: https://blog.betrybe.com/javascript/javascript-date-format/
     //ref: https://www.devmedia.com.br/javascript-date-trabalhando-com-data-e-hora/40649
-    it.only('Should create a transaction', () => {
+    it('Should create a transaction', () => {
         //Arrange:
         //Cria uma data formatada:
         let data = new Date();
         let dataPagtoTransact = (adicionaZero(data.getDate())) + "/" + (adicionaZero(data.getMonth() + 1)) + "/" + data.getFullYear();
-        let dataPagtoFormatada =(adicionaZero(data.getDate()+1)) + "/" + (adicionaZero(data.getMonth() + 1)) + "/" + data.getFullYear();
+        let dataPagtoFormatada = (adicionaZero(data.getDate() + 1)) + "/" + (adicionaZero(data.getMonth() + 1)) + "/" + data.getFullYear();
 
         //Cria uma conta:
         const fakeNomeConta = 'Conta criada para transações - ' + random(0, 100000);
         cy.cmdAddAccount(fakeNomeConta);
-        
+
         //Act:
         //Adiciona a transação
         cy.getContaByName(fakeNomeConta).then(obj => {
@@ -162,14 +162,34 @@ describe('Sholud test at a functional level', () => {
 
 
         //Asserts:
-        cy.get('@response').its('status').should('be.equal',201);
+        cy.get('@response').its('status').should('be.equal', 201);
         //Valida se recebeu o id:
         cy.get('@response').its('body.id').should('exist');
 
     });
 
-    it('Should get balance', () => {
+    it.only('Should get balance', () => {
         //Arrange:
+        cy.request({
+            url: Cypress.config().baseApiUrl + '/saldo',
+            method: 'GET',
+            headers: { Authorization: `JWT ${token}` },
+
+        }).then(resp => {
+            console.log(resp)
+
+            let saldoConta = null;
+            //Percorre o array do body e pega o salda conta de saldo:
+            resp.body.forEach(element => {
+                if (element.conta === 'Conta para saldo') {
+                    saldoConta = element.saldo;
+                }
+            });
+            
+            //checa o valor:
+            expect(saldoConta).to.be.equal('534.00')
+
+        });
 
         //Act:
 
